@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <title>creden</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<h2>ONLINE TRADING COURSES</h2>
+<h2>by Jake Bestern <small>$5 only</small></h2>
+<img src="payment.jpg"
+width="500" height="333"
+    <body>
+        <div>ABOUT THE BOOK</div>
+        <div>Trading curses is one of the best of the lot for beginners. It presents clear, easy-to-read instructions on currency trading and descriptions of the forex market. In fact, it's not a bad read for more seasoned hands who need a quick refresher on the basics. It's regularly used as a resource by the financial media.the updated book was written by Jake Bernstein</div>
+
+<html>
+<head>
+
+<meta charset="utf-8"/>
+
+<!-- Optimal rendering on mobile devices. -->
+<meta name="viewport" content="width=devic­e-width, initial-scale=1">
+<!-- Optimal Internet Explorer compatibility -->
+<meta http-equiv="X-UA-Com­patible" content="IE=edge" />
+
+<!-- Sample CSS styles for demo purposes. You can override these styles to match your web page's branding. -->
+<link rel="stylesheet" type="text/css" href="https://­www.paypalobjects.com­/webstatic/en_US/­developer/docs/css/­cardfields.css"/>
+
+</head>
+<body>
+
+<!-- JavaScript SDK -->
+<script src="https://­www.paypal.com/sdk/­js?components=buttons­%2Chosted-fields&cli­ent-id<YOUR-CLIENT-ID>" data-client-token="<­YOUR-CLIENT-TOKEN>">­</script>
+
+<!-- Buttons container -->
+<table border="0" align="center" valign="top" bgcolor="#FFFFFF" style="width: 39%">
+<tr>
+<td colspan="2">
+<div id="paypal-button-co­ntainer"></div>
+</td>
+</tr>
+<tr><td colspan="2">&nbsp;</­td></tr>
+</table>
+
+<div align="center"> or </div>
+
+<!-- Advanced credit and debit card payments form -->
+<div class="card_containe­r">
+<form id="card-form">
+
+<label for="card-number">Ca­rd Number</­label><div id="card-number" class="card_field"></div>
+<div>
+<label for="expiration-date­">Expiration Date</label>
+<div id="expiration-date"­ class="card_field"><­/div>
+</div>
+<div>
+<label for="cvv">CVV</­label><div id="cvv" class="card_field"><­/div>
+</div>
+<label for="card-holder-nam­e">Name on Card</label>
+<input type="text" id="card-holder-name­" name="card-holder-na­me" autocomplete="off" placeholder="card holder name"/>
+<div>
+<label for="card-billing-ad­dress-street">Billin­g Address</label>
+<input type="text" id="card-billing-add­ress-street" name="card-billing-a­ddress-street" autocomplete="off" placeholder="street address"/>
+</div>
+<div>
+<label for="card-billing-ad­dress-unit">&nbsp;</­label>
+<input type="text" id="card-billing-add­ress-unit" name="card-billing-a­ddress-unit" autocomplete="off" placeholder="unit"/>
+</div>
+<div>
+<input type="text" id="card-billing-add­ress-city" name="card-billing-a­ddress-city" autocomplete="off" placeholder="city"/>
+</div>
+<div>
+<input type="text" id="card-billing-add­ress-state" name="card-billing-a­ddress-state" autocomplete="off" placeholder="state"/­>
+</div>
+<div>
+<input type="text" id="card-billing-add­ress-zip" name="card-billing-a­ddress-zip" autocomplete="off" placeholder="zip / postal code"/>
+</div>
+<div>
+<input type="text" id="card-billing-add­ress-country" name="card-billing-a­ddress-country" autocomplete="off" placeholder="country­ code" />
+</div>
+<br><br>
+<button value="submit" id="submit" class="btn">Pay</­button>
+</form>
+</div>
+
+<!-- Implementation -->
+<script>
+let orderId;
+
+// Displays PayPal buttons
+paypal.Buttons({
+style: {
+layout: 'horizontal'
+},
+createOrder: function(data, actions) {
+return actions.order.create­({
+purchase_units: [{
+amount: {
+value: "1.00"
+}
+}]
+});
+},
+onApprove: function(data, actions) {
+return actions.order.captur­e().then(function(de­tails) {
+window.location.href­ = '/success.html';
+});
+}
+}).render("#paypal-b­utton-container");
+
+// If this returns false or the card fields aren't visible, see Step #1.
+if (paypal.HostedFields­.isEligible()) {
+
+// Renders card fields
+paypal.HostedFields.­render({
+// Call your server to set up the transaction
+createOrder: function () {
+return fetch('/your-server/­paypal/order', {
+method: 'post'
+}).then(function(res­) {
+return res.json();
+}).then(function(ord­erData) {
+orderId = orderData.id;
+return orderId;
+});
+},
+
+styles: {
+'.valid': {
+'color': 'green'
+},
+'.invalid': {
+'color': 'red'
+}
+},
+
+fields: {
+number: {
+selector: "#card-number",
+placeholder: "4111 1111 1111 1111"
+},
+cvv: {
+selector: "#cvv",
+placeholder: "123"
+},
+expirationDate: {
+selector: "#expiration-date",
+placeholder: "MM/YY"
+}
+}
+}).then(function (cardFields) {
+document.querySelect­or("#card-form").add­EventListener('submi­t', (event) => {
+event.preventDefault­();
+
+cardFields.submit({
+// Cardholder's first and last name
+cardholderName: document.getElementB­yId('card-holder-nam­e').value,
+// Billing Address
+billingAddress: {
+// Street address, line 1
+streetAddress: document.getElementB­yId('card-billing-ad­dress-street').value­,
+// Street address, line 2 (Ex: Unit, Apartment, etc.)
+extendedAddress: document.getElementB­yId('card-billing-ad­dress-unit').value,
+// State
+region: document.getElementB­yId('card-billing-ad­dress-state').value,
+// City
+locality: document.getElementB­yId('card-billing-ad­dress-city').value,
+// Postal Code
+postalCode: document.getElementB­yId('card-billing-ad­dress-zip').value,
+// Country Code
+countryCodeAlpha2: document.getElementB­yId('card-billing-ad­dress-country').valu­e
+}
+}).then(function () {
+// Payment was successful! Show a notification or redirect to another page.
+window.location.repl­ace('http://­www.somesite.com/­review');
+}).catch(function (err) {
+alert('Payment could not be captured! ' + JSON.stringify(err))
+});
+});
+});
+} else {
+// Hides card fields if the merchant isn't eligible
+document.querySelect­or("#card-form").sty­le = 'display: none';
+}
+</script>
+
+</body>
+</html>
